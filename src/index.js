@@ -1,8 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faCheckSquare, faCoffee, faDesktop, faUser, faUsers, faKey, faLock, faLayerGroup, faCircle, faCog,
+   faUniversity, faCloud, faExternalLinkAlt, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faCheckSquare, faCoffee, faDesktop, faUser, faUsers, faLock, faKey, faLayerGroup, faCircle, faCog, 
+  faUniversity, faCloud, faExternalLinkAlt, faEnvelope)
 
 ReactDOM.render(
   <React.StrictMode>
