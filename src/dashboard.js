@@ -39,10 +39,10 @@ class Dashboard extends Component{
         return(
             <div>
 {/*------------------------------- Navbar ------------------------------------- */}
-                <Navbar bg="dark" variant="dark" sticky="top" >
+                <Navbar variant="dark" sticky="top" className="primaryNav">
                     <Navbar.Brand href="#home"><h1>LCIP - Admin </h1></Navbar.Brand>
                     <Nav className="ml-auto">
-                    <Navbar.Brand>A Light-weight Cloud Identity provider</Navbar.Brand> 
+                    <Navbar.Brand className="profile">Light-weight Cloud Identity Provider</Navbar.Brand> 
                         <Button variant="danger" type='button' onClick={this.logout}>Logout</Button>
                     </Nav>                   
                 </Navbar>
@@ -52,7 +52,7 @@ class Dashboard extends Component{
                     <Col lg="10" md="10" sm="10"> {dashboardContent} </Col>
                 </Row>
 {/*------------------------------- Footer ------------------------------------- */}
-                <Navbar bg="dark" variant="dark" fixed="bottom" className="justify-content-center">
+                <Navbar variant="dark" fixed="bottom" className="justify-content-center primaryNav">
                 <Navbar.Brand >Copyright&#169; 2021</Navbar.Brand>
                 </Navbar>
                 
