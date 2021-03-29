@@ -49,8 +49,7 @@ class Login extends Component{
                     <h1> LCIP - Admin </h1>
                     <p>A Light-weight Cloud Identity provider</p>
                 </Card.Header> 
-                <Card.Title  style={{ marginTop:'15px'}}><h2>Login</h2></Card.Title>
-                <hr/>   
+                <Card.Title  style={{ marginTop:'15px'}}><h2>Login</h2></Card.Title> 
                     <Form style={{ margin:'15px'}} onSubmit={this.handleSubmit}>
                         <InputGroup className="mb-2 mr-sm-2">
                             <InputGroup.Prepend>
