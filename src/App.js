@@ -10,13 +10,13 @@ class App extends Component{
     }
   }
   login =(resp)=>{
+    localStorage.setItem("isLoggedin", resp);
     this.setState({isLoggedin:resp});
   }
   render(){
-    var isLoggedin = this.state.isLoggedin;
     var form = (<Login loginState={this.login}/>);
     return (
-            (isLoggedin?<Dashboard loginState={this.login}/>:form)
+      ((localStorage.getItem("isLoggedin")==='true')?<Dashboard loginState={this.login}/>:form)
             );
   }
 }

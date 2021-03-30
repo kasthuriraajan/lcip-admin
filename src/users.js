@@ -8,46 +8,84 @@ class Users extends Component{
         this.state = {
           isDelete : false,
           selectedUser : "",
+          selectedTenant : "",
           users : []
         }
       }
     
     handleClose = () => {this.setState({
         isDelete : false,
-        selectedUser : ""
+        selectedUser : "",
+        selectedTenant : ""
         });
     }
     handleShow = (event) => {
+        var info = event.target.value.split(",");
         this.setState({
             isDelete : true ,
-            selectedUser : event.target.value
+            selectedUser : info[0],
+            selectedTenant : info[1]
         });
     }
-    handleDelete = () => {     
-        alert('User  '+ this.state.selectedUser + '  is Deleted');
+    // handleDelete = () => {     
+    //     alert('User  '+ this.state.selectedUser + '  is Deleted');
+    //     this.setState({
+    //         isDelete : false,
+    //         selectedUser : "",
+    //         selectedTenant : ""
+    //     });
+    // }
+    handleDelete = () => {
+        fetch('https://5n3eaptgj4.execute-api.us-east-1.amazonaws.com/dev/user/'+this.state.selectedUser
+        +'?tenantId='+this.state.selectedTenant,{
+        method: 'DELETE',
+        headers: {
+            'Authorization': 'Bearer '+localStorage.getItem("token")
+        }
+        })
+        .then(res => res.json())
+        .then(data => this.afterDelete(data));
+    }
+    afterDelete = (data)=>{
+        if('Status' in data){
+            alert(data.Status);
+            fetch("https://5n3eaptgj4.execute-api.us-east-1.amazonaws.com/dev/user/list",{
+                headers: {
+                    'Authorization': 'Bearer '+localStorage.getItem("token")
+                }})
+            .then(res => res.json())
+            .then(data=>this.setState({users:data}));
+        }
+        else{
+            console.log(data);
+        }
         this.setState({
             isDelete : false,
-            selectedUser : ""
+            selectedUser : "",
+            selectedTenant : ""
         });
     }
     componentDidMount(){
-        fetch("http://localhost:9090/users")
+        fetch("https://5n3eaptgj4.execute-api.us-east-1.amazonaws.com/dev/user/list",{
+            headers: {
+                'Authorization': 'Bearer '+localStorage.getItem("token")
+            }})
         .then(res => res.json())
         .then(data=>this.setState({users:data}));
     }
 
   render(){
       const userInfo = this.state.users.map(user => (
-            <tr key={user.userName}>
-            <td>{user.userName}</td>
-            <td>{user.userEmail}</td>
-            <td>{user.tenantId}</td>
-            <td><button className='btn btn-danger' name="deleteUser" value={user.userName} onClick={this.handleShow}>Delete</button></td>
+            <tr key={user['User Name']}>
+            <td>{user['User Name']}</td>
+            <td>{user['Email']}</td>
+            <td>{user['Tenant Name']}</td>
+            <td><button className='btn btn-danger' name="deleteUser" value={[user['User Name'],user['Tenant Name']]} onClick={this.handleShow}>Delete</button></td>
             <Modal show={this.state.isDelete} onHide={this.handleClose}>
                 <Modal.Header closeButton>
                 <Modal.Title>Delete</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Do you really want to delete user:-  {this.state.selectedUser} ?</Modal.Body>
+                <Modal.Body>Do you really want to delete user:-  {this.state.selectedUser} from Tenant {this.state.selectedTenant}?</Modal.Body>
                 <Modal.Footer>
                 <Button variant="secondary" onClick={this.handleClose}>
                     Cancel

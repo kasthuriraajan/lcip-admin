@@ -18,12 +18,8 @@ class Dashboard extends Component{
         });
     }
     logout=()=>{
+        localStorage.clear();
         this.props.loginState(false);
-    }
-    componentDidMount(){
-        fetch("http://localhost:9090/users")
-      .then(res => res.json())
-      .then(data=>console.log(data));
     }
     render(){
         var dashboardContent = <Users/>;

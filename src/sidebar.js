@@ -5,16 +5,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 class Sidebar extends Component{
 
   loadUser=()=>{
-    console.log("USERS")
     this.props.loadContent("USERS");
   }
 
   loadApps=()=>{
-    console.log("APPS")
     this.props.loadContent("APPS");
   }
   loadTenants=()=>{
-    console.log("TENANTS")
     this.props.loadContent("TENANTS");
   }
 

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Card, Button, Table, Modal} from 'react-bootstrap';
+import {Card, Button, Table} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import TenantForm from './tenantform';
 
@@ -24,50 +24,34 @@ class Tenants extends Component{
             isCreateTenant : !resp
         }); 
     }
-    handleClose = () => {this.setState({
-        isDelete : false,
-        selectedTenant : ""
-        });
-    }
-    handleShow = (event) => {
-        this.setState({
-            isDelete : true ,
-            selectedTenant : event.target.value
-        });
-    }
-    handleDelete = () => {     
-        alert('Tenant '+ this.state.selectedTenant + '  is Deleted');
-        this.setState({
-            isDelete : false,
-            selectedTenant : ""
-        });
+    afterAdd = (data)=>{
+        if('Status' in data){
+            alert(data.Status);
+            fetch("https://5n3eaptgj4.execute-api.us-east-1.amazonaws.com/dev/tenant/list",{
+            headers: {
+                'Authorization': 'Bearer '+localStorage.getItem("token")
+            }})
+        .then(res => res.json())
+        .then(data=>this.setState({tenants:data}));
+        }
+        else{
+            console.log(data);
+        }
     }
     componentDidMount(){
-        fetch("http://localhost:9090/tenants")
+        fetch("https://5n3eaptgj4.execute-api.us-east-1.amazonaws.com/dev/tenant/list",{
+            headers: {
+                'Authorization': 'Bearer '+localStorage.getItem("token")
+            }})
         .then(res => res.json())
         .then(data=>this.setState({tenants:data}));
     }
   render(){
     var isCreateTenant = this.state.isCreateTenant;
     const tenantInfo = this.state.tenants.map(tenant => (
-        <tr key={tenant.tenantID}>
-        <td>{tenant.tenantID}</td>
-        <td>{tenant.tenantName}</td>
-        <td><button className='btn btn-danger' name="deleteTenant" value={tenant.tenantID} onClick={this.handleShow}>Delete</button></td>
-        <Modal show={this.state.isDelete} onHide={this.handleClose}>
-            <Modal.Header closeButton>
-            <Modal.Title>Delete</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>Do you really want to delete tenant:-  {this.state.selectedTenant} ?</Modal.Body>
-            <Modal.Footer>
-            <Button variant="secondary" onClick={this.handleClose}>
-                Cancel
-            </Button>
-            <Button variant="danger" type="button" onClick={this.handleDelete}>
-                Delete
-            </Button>
-            </Modal.Footer>
-        </Modal>
+        <tr key={tenant['Tenant Id']}>
+        <td>{tenant['Tenant Id']}</td>
+        <td>{tenant['Tenant Admin']}</td>
     </tr>
     ));
     var table = (        
@@ -80,9 +64,8 @@ class Tenants extends Component{
                 <Table responsive>
                     <thead>
                         <tr>
-                            <th>Tenant ID</th>
                             <th>Tenant Name</th>
-                            <th>Delete</th>
+                            <th>Tenant Admin</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -95,7 +78,7 @@ return(
         style={{ minHeight: '50rem' ,  marginTop:'5px', marginRight:'5px', borderColor:'black'}}>
         <Card.Header><h2><FontAwesomeIcon icon="university" />  Tenants</h2></Card.Header> 
         <hr/>  
-        {isCreateTenant?<TenantForm setCreatedTenant = {this.setTenantCreated}/>:table} 
+        {isCreateTenant?<TenantForm setAddedTenantData={this.afterAdd} setCreatedTenant = {this.setTenantCreated}/>:table} 
     </Card>
 
     );

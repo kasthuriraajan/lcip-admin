@@ -6,7 +6,6 @@ class Login extends Component{
     constructor(props){
         super(props);
         this.state = {
-            appId : "A001",
             username : "",
             password : ""
         }
@@ -16,27 +15,45 @@ class Login extends Component{
     }
     
     handleSubmit = (event)=> {
-        alert('Username: ' + this.state.username + 'Password: '+this.state.password);
         const loginInfo = {
-            tenantId : this.state.appId,
             userName :this.state.username,
-            password : this.state.password 
+            password : this.state.password
         }
-        this.login(loginInfo);
+
+        fetch('https://5n3eaptgj4.execute-api.us-east-1.amazonaws.com/dev/tenant/login',{
+            method: 'POST',
+            headers: {
+                'content-type':'application/json'
+            },
+            body: JSON.stringify(loginInfo)
+        })
+        .then(res => res.json())
+        .then(data =>this.login(data));
+        localStorage.setItem("username", this.state.username);
+        this.setState({username:"", password:""});
         event.preventDefault();
     }
 
-    login = (userInfo)=>{
-        fetch('http://localhost:9090/echo',{
-        method: 'POST',
-        headers: {
-            'content-type':'application/json'
-        },
-        body: JSON.stringify(userInfo)
-    })
-    .then(res => res.json())
-    .then(data =>console.log(data));
-    this.props.loginState(true);
+    login = (data, resp)=>{
+        if('status' in data){
+            if(data.status){
+                this.props.loginState(true);
+            }
+            else{
+                alert("Your username or pasword is wrong.");
+                console.log(data)
+            }
+        }
+        else{
+            console.log(data);
+        }        
+    }
+    clear = ()=>{
+        this.setState({
+            username : "",
+            password : ""
+        });
+        localStorage.clear();
     }
    
     render(){
@@ -65,7 +82,7 @@ class Login extends Component{
                             <Form.Control type="password"name="password" value={this.state.password} placeholder="Password"
                             onChange ={this.handleChange} />
                         </InputGroup>
-                        <Button variant="secondary" type='button' size="lg" style={{ margin:'5px'}}>Clear</Button>
+                        <Button variant="secondary" type='button' onClick={this.clear} size="lg" style={{ margin:'5px'}}>Clear</Button>
                         <Button variant="primary" type="submit" value="Submit" size="lg">Login</Button>                      
                     </Form>
                 </Card>

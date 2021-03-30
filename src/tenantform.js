@@ -17,16 +17,20 @@ class TenantForm extends Component{
     }
     
     handleSubmit = (event)=> {
-        alert('Tenant : '+ this.state.tenantName+'UserName: ' + this.state.username);
         const tenantInfo ={
-            tenantName : this.state.tenantName
+            tenantId : this.state.tenantName,
+            adminUserName : this.state.username,
+            adminEmail : this.state.email,
+            adminPassword : this.state.password
         }
-        
-        this.createTenant(tenantInfo);
-        event.preventDefault();
-    }
-    createTenant = (tenantInfo)=>{
-        fetch('http://localhost:9090/echo',{
+        const userInfo ={
+            tenantId : this.state.tenantName,
+            userEmail: this.state.email,
+            userName : this.state.username,
+            password : this.state.password
+        }
+
+        fetch('https://5n3eaptgj4.execute-api.us-east-1.amazonaws.com/dev/tenant/add',{
         method: 'POST',
         headers: {
             'content-type':'application/json'
@@ -34,27 +38,42 @@ class TenantForm extends Component{
             body: JSON.stringify(tenantInfo)
         })
         .then(res => res.json())
-        .then(data =>console.log(data));
-        const userInfo = {
-            tenantId : "T001",
-            userEmail: this.state.email,
-            userName : this.state.username,
-            password : this.state.password
-        }
-        this.createUser(userInfo);
+        .then(data =>('Status' in data)?alert("Tenant "+this.state.tenantName+ " registration is " +data.Status):console.log(data));
+        
+        this.register(userInfo);
+        this.setState({
+            tenantName:"",
+            email:"",
+            username : "",
+            password : ""
+        });
+        event.preventDefault();
     }
-    createUser = (userInfo)=>{
-        fetch('http://localhost:9090/echo',{
+
+    register = (userInfo)=>{
+        fetch('https://5n3eaptgj4.execute-api.us-east-1.amazonaws.com/dev/user',{
         method: 'POST',
         headers: {
+            'Authorization': 'Bearer '+localStorage.getItem("token"),
             'content-type':'application/json'
         },
-            body: JSON.stringify(userInfo)
-        })
-        .then(res => res.json())
-        .then(data =>console.log(data));
+        body: JSON.stringify(userInfo)
+    })
+    .then(res => res.json())
+    .then(data =>this.props.setAddedTenantData(data));
+    this.props.setCreatedTenant(true);
+    }
+
+    cancel = ()=>{
+        this.setState({
+            tenantName:"",
+            email:"",
+            username : "",
+            password : ""
+        });
         this.props.setCreatedTenant(true);
     }
+
   render(){
     return(
         <Row className="justify-content-md-center">
@@ -93,7 +112,7 @@ class TenantForm extends Component{
                         onChange ={this.handleChange}/>
                     </InputGroup>
                     <Row className="justify-content-md-center">
-                        <Button variant="secondary" type='submit' size="lg" style={{ margin:'5px'}}>Clear</Button>
+                        <Button variant="secondary" type='button' onClick={this.cancel} size="lg" style={{ margin:'5px'}}>Cancel</Button>
                         <Button variant="success" type='submit' value="Submit" size="lg" >Create Tenant</Button>     
                     </Row>                 
                 </Form>                 
