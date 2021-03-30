@@ -38,7 +38,7 @@ class TenantForm extends Component{
             body: JSON.stringify(tenantInfo)
         })
         .then(res => res.json())
-        .then(data =>('Status' in data)?this.sendDetails:console.log(data));
+        .then(data =>('Status' in data)?this.sendDetails():console.log(data));
         
         this.register(userInfo);
         this.setState({
