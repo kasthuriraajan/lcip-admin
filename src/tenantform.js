@@ -38,7 +38,7 @@ class TenantForm extends Component{
             body: JSON.stringify(tenantInfo)
         })
         .then(res => res.json())
-        .then(data =>('Status' in data)?alert("Tenant "+this.state.tenantName+ " registration is " +data.Status):console.log(data));
+        .then(data =>('Status' in data)?this.sendDetails:console.log(data));
         
         this.register(userInfo);
         this.setState({
@@ -48,6 +48,18 @@ class TenantForm extends Component{
             password : ""
         });
         event.preventDefault();
+    }
+
+    sendDetails =()=>{
+        alert("Tenant is created successfully. Mail generated to the tenant admin");
+        fetch('https://5n3eaptgj4.execute-api.us-east-1.amazonaws.com/dev/tenant',{
+        method: 'POST',
+        headers: {
+            'content-type':'application/json'
+        }
+        })
+        .then(res => res.json())
+        .then(data =>console.log(data));
     }
 
     register = (userInfo)=>{
