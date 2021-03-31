@@ -24,7 +24,7 @@ class TenantForm extends Component{
             adminPassword : this.state.password
         }
         const userInfo ={
-            tenantId : this.state.tenantName,
+            tenantId : "lcip-super",
             userEmail: this.state.email,
             userName : this.state.username,
             password : this.state.password
