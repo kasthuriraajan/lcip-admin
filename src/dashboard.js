@@ -48,7 +48,7 @@ class Dashboard extends Component{
                     <Col lg="10" md="10" sm="10"> {dashboardContent} </Col>
                 </Row>
 {/*------------------------------- Footer ------------------------------------- */}
-                <Navbar variant="dark" fixed="bottom" className="justify-content-center primaryNav">
+                <Navbar variant="dark" className="justify-content-center primaryNav">
                 <Navbar.Brand >Copyright&#169; 2021</Navbar.Brand>
                 </Navbar>
                 
