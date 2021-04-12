@@ -92,7 +92,7 @@ class TenantForm extends Component{
             <Col lg="6" md="6" sm="6">
             <Card text = "dark" className="text-left" 
             style={{ marginTop:'5px', marginRight:'5px', borderColor:'black'}}>
-            <Card.Header><h2><FontAwesomeIcon icon="layer-group" />  Create App</h2></Card.Header> 
+            <Card.Header><h2><FontAwesomeIcon icon="layer-group" />  Create Tenant</h2></Card.Header> 
             <hr/> 
             <Form style={{ margin:'15px'}} onSubmit={this.handleSubmit}>
                     <InputGroup className="mb-2 mr-sm-2">
