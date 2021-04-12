@@ -1,7 +1,6 @@
-# LCIP Admin 
+# LCIP Admin
 
-LCIP is a Light-weight Cloud Identity Provider.LCIP Admin module is a dashboard which serves the admin related functions of LCIP. This is a react.js based web application.
-
+LCIP is a Light-weight Cloud Identity Provider. LCIP Admin module is a a react.js based web application. Admin of the LCIP can use this applicatiion to manage LCIP.
 
 ## To run the application
 
